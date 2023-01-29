@@ -74,9 +74,20 @@ export class News extends Component {
   constructor() {
     super();
     this.state = {
-      articles: this.articles,
+      articles: [],
       loading: false,
     };
+  }
+
+  async componentDidMount() {
+    console.log("cdm");
+    let url =
+      "https://newsapi.org/v2/top-headlines?country=in&apiKey=21d4e7d32bd14f659dc7d95fd138d3d9";
+    let data = await fetch(url);
+    let parsedData = data.json();
+    parsedData.then((json) => {
+      this.setState({ articles: json.articles, loading: false });
+    });
   }
   render() {
     return (
@@ -84,11 +95,20 @@ export class News extends Component {
         <div className="row">
           <h2>Top Headlines</h2>
           {this.state.articles.map((element) => {
-            console.log(element);
+            // console.log(element);
+            return (
+              <div className="col-md-4" key={element.url}>
+                <NewsItem
+                  title={element.title ? element.title.slice(0, 48) : ""}
+                  description={
+                    element.description ? element.description.slice(0, 88) : ""
+                  }
+                  imageUrl={element.urlToImage}
+                  url={element.url}
+                />
+              </div>
+            );
           })}
-          <div className="col-md-4">
-            <NewsItem title="myTitle" description="myDesc" imageUrl="https://ichef.bbci.co.uk/live-experience/cps/624/cpsprodpb/165B6/production/_128347519_stevesmith.jpg"/>
-          </div>
           {/* <div className="col-md-4">
             <NewsItem />
           </div>

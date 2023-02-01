@@ -76,23 +76,61 @@ export class News extends Component {
     this.state = {
       articles: [],
       loading: false,
+      page: 1,
     };
   }
 
   async componentDidMount() {
     console.log("cdm");
     let url =
-      "https://newsapi.org/v2/top-headlines?country=in&apiKey=21d4e7d32bd14f659dc7d95fd138d3d9";
+      "https://newsapi.org/v2/top-headlines?country=in&apiKey=21d4e7d32bd14f659dc7d95fd138d3d9&page=1&pageSize=20&page=1";
     let data = await fetch(url);
     let parsedData = data.json();
     parsedData.then((json) => {
-      this.setState({ articles: json.articles, loading: false });
+      console.log("Total results: ", json.totalResults)
+      this.setState({        
+        articles: json.articles,
+        loading: false,
+        totalResults: json.totalResults,
+      });
     });
   }
+  handlePrevClick = async () => {
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=21d4e7d32bd14f659dc7d95fd138d3d9&pageSize=20&page=${
+      this.state.page - 1
+    }`;
+    let data = await fetch(url);
+    let parsedData = data.json();
+    parsedData.then((json) => {
+      console.log("Total results: ", json.totalResults)
+      this.setState({
+        articles: json.articles,
+        loading: false,
+        page: this.state.page - 1,
+        totalResults: json.totalResults,
+      });
+    });
+  };
+  handleNextClick = async () => {
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=21d4e7d32bd14f659dc7d95fd138d3d9&pageSize=20&page=${
+      this.state.page + 1
+    }`;
+    let data = await fetch(url);
+    let parsedData = data.json();
+    parsedData.then((json) => {
+      console.log("Total results: ", json.totalResults)
+      this.setState({
+        articles: json.articles,
+        loading: false,
+        page: this.state.page + 1,
+        totalResults: json.totalResults
+      });
+    });
+  };
   render() {
     return (
       <div className="container my-3">
-        <div className="row">
+        <div className="row my-3">
           <h2>Top Headlines</h2>
           {this.state.articles.map((element) => {
             // console.log(element);
@@ -115,6 +153,24 @@ export class News extends Component {
           <div className="col-md-4">
             <NewsItem />
           </div> */}
+        </div>
+        <div className="container d-flex justify-content-between">
+          <button
+            type="button"
+            className="btn btn-dark"
+            onClick={this.handlePrevClick}
+            disabled={this.state.page <= 1}
+          >
+            &larr; Previous
+          </button>
+          <button
+            type="button"
+            className="btn btn-dark"
+            onClick={this.handleNextClick}
+            disabled={this.state.page >= Math.ceil(this.state.totalResults/20)}
+          >
+            Next &rarr;
+          </button>
         </div>
       </div>
     );

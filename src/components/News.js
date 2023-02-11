@@ -77,6 +77,7 @@ export class News extends Component {
       articles: [],
       loading: false,
       page: 1,
+      totalResults: 0,
     };
   }
 
@@ -87,8 +88,8 @@ export class News extends Component {
     let data = await fetch(url);
     let parsedData = data.json();
     parsedData.then((json) => {
-      console.log("Total results: ", json.totalResults)
-      this.setState({        
+      console.log("Total results: ", json.totalResults);
+      this.setState({
         articles: json.articles,
         loading: false,
         totalResults: json.totalResults,
@@ -102,7 +103,7 @@ export class News extends Component {
     let data = await fetch(url);
     let parsedData = data.json();
     parsedData.then((json) => {
-      console.log("Total results: ", json.totalResults)
+      console.log("Total results: ", json.totalResults);
       this.setState({
         articles: json.articles,
         loading: false,
@@ -118,12 +119,12 @@ export class News extends Component {
     let data = await fetch(url);
     let parsedData = data.json();
     parsedData.then((json) => {
-      console.log("Total results: ", json.totalResults)
+      console.log("Total results: ", json.totalResults);
       this.setState({
         articles: json.articles,
         loading: false,
         page: this.state.page + 1,
-        totalResults: json.totalResults
+        totalResults: json.totalResults,
       });
     });
   };
@@ -131,7 +132,7 @@ export class News extends Component {
     return (
       <div className="container my-3">
         <div className="row my-3">
-          <h2>Top Headlines</h2>
+          <h1 className="text-center">NewsMonkey - Top Headlines</h1>
           {this.state.articles.map((element) => {
             // console.log(element);
             return (
@@ -167,7 +168,9 @@ export class News extends Component {
             type="button"
             className="btn btn-dark"
             onClick={this.handleNextClick}
-            disabled={this.state.page >= Math.ceil(this.state.totalResults/20)}
+            disabled={
+              this.state.page >= Math.ceil(this.state.totalResults / 20)
+            }
           >
             Next &rarr;
           </button>

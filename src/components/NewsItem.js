@@ -7,7 +7,8 @@ export class NewsItem extends Component {
   //   console.log("Hello from NewsItem constructor");
   // }
   render() {
-    let { title, description, imageUrl, url } = this.props;
+    let { title, description, imageUrl, url, author, date, source } =
+      this.props;
     return (
       <div>
         <div className="card">
@@ -20,14 +21,34 @@ export class NewsItem extends Component {
             className="card-img-top"
             alt="..."
           />
+          <span
+            className="position-absolute top-0 translate-middle badge rounded-pill bg-danger"
+            style={{ zIndex: 1, left: author.length > 5 ? "90%" : "95%" }}
+          >
+            {author}
+            <span className="visually-hidden">unread messages</span>
+          </span>
+
           <div className="card-body">
-            <h5 className="card-title">{title}...</h5>
+            <h5 className="card-title">
+              {title}...<span className="badge bg-secondary">New</span>
+            </h5>
             <p className="card-text">
-              {description}...
+              {description}
               {/* Some quick example text to build on the card title and make up the
               bulk of the card's content. */}
             </p>
-            <a href={url} target="_blank" rel="noreferrer" className="btn btn-dark">
+            <p className="card-text">
+              <small className="text-muted">
+                By {author} on {new Date(date).toLocaleString()}
+              </small>
+            </p>
+            <a
+              href={url}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-dark"
+            >
               Read more
             </a>
           </div>

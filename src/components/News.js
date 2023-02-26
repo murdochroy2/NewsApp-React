@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import NewsItem from "./NewsItem";
+import Spinner from "./Spinner";
+import PropTypes from "prop-types";
 
 export class News extends Component {
   articles = [
@@ -71,6 +73,18 @@ export class News extends Component {
         "Last week, we at ESPNcricinfo did something we have been thinking of doing for eight years now: pretend-live ball-by-ball commentary for a classic cricket match. We knew the result, yes, but we tried… [+6823 chars]",
     },
   ];
+
+  static defaultPros = {
+    country: "in",
+    pageSize: 8,
+    category: "general",
+  };
+
+  static propTypes = {
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+    category: PropTypes.string,
+  };
   constructor() {
     super();
     this.state = {
@@ -83,8 +97,8 @@ export class News extends Component {
 
   async componentDidMount() {
     console.log("cdm");
-    let url =
-      `https://newsapi.org/v2/top-headlines?country=in&apiKey=21d4e7d32bd14f659dc7d95fd138d3d9&page=1&pageSize=${this.props.pageSize}&page=1`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=59caab13f9bc472a8485fc671d842e48&page=1&pageSize=${this.props.pageSize}&page=1`;
+    this.setState({ loading: true });
     let data = await fetch(url);
     let parsedData = data.json();
     parsedData.then((json) => {
@@ -92,14 +106,18 @@ export class News extends Component {
       this.setState({
         articles: json.articles,
         loading: false,
+        page: this.state.page,
         totalResults: json.totalResults,
       });
     });
   }
   handlePrevClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=21d4e7d32bd14f659dc7d95fd138d3d9&pageSize=${this.props.pageSize}&page=${
-      this.state.page - 1
-    }`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${
+      this.props.country
+    }&category=${this.props.category}&apiKey=59caab13f9bc472a8485fc671d842e48&pageSize=${
+      this.props.pageSize
+    }&page=${this.state.page - 1}`;
+    this.setState({ loading: true });
     let data = await fetch(url);
     let parsedData = data.json();
     parsedData.then((json) => {
@@ -113,9 +131,12 @@ export class News extends Component {
     });
   };
   handleNextClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=21d4e7d32bd14f659dc7d95fd138d3d9&pageSize=${this.props.pageSize}&page=${
-      this.state.page + 1
-    }`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${
+      this.props.country
+    }&category=${this.props.category}&apiKey=59caab13f9bc472a8485fc671d842e48&pageSize=${
+      this.props.pageSize
+    }&page=${this.state.page + 1}`;
+    this.setState({ loading: true });
     let data = await fetch(url);
     let parsedData = data.json();
     parsedData.then((json) => {
@@ -133,21 +154,25 @@ export class News extends Component {
       <div className="container my-3">
         <div className="row my-3">
           <h1 className="text-center">NewsMonkey - Top Headlines</h1>
-          {this.state.articles.map((element) => {
-            // console.log(element);
-            return (
-              <div className="col-md-4" key={element.url}>
-                <NewsItem
-                  title={element.title ? element.title.slice(0, 48) : ""}
-                  description={
-                    element.description ? element.description.slice(0, 88) : ""
-                  }
-                  imageUrl={element.urlToImage}
-                  url={element.url}
-                />
-              </div>
-            );
-          })}
+          {this.state.loading && <Spinner className="text-center" />}
+          {!this.state.loading &&
+            this.state.articles.map((element) => {
+              // console.log(element);
+              return (
+                <div className="col-md-4" key={element.url}>
+                  <NewsItem
+                    title={element.title ? element.title.slice(0, 48) : ""}
+                    description={
+                      element.description
+                        ? element.description.slice(0, 88)
+                        : ""
+                    }
+                    imageUrl={element.urlToImage}
+                    url={element.url}
+                  />
+                </div>
+              );
+            })}
           {/* <div className="col-md-4">
             <NewsItem />
           </div>
@@ -169,7 +194,8 @@ export class News extends Component {
             className="btn btn-dark"
             onClick={this.handleNextClick}
             disabled={
-              this.state.page >= Math.ceil(this.state.totalResults / this.props.pageSize)
+              this.state.page >=
+              Math.ceil(this.state.totalResults / this.props.pageSize)
             }
           >
             Next &rarr;

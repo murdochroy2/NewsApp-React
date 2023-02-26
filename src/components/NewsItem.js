@@ -10,7 +10,7 @@ export class NewsItem extends Component {
     let { title, description, imageUrl, url } = this.props;
     return (
       <div>
-        <div className="card" style={{ width: " 18rem" }}>
+        <div className="card">
           <img
             src={
               imageUrl
@@ -27,7 +27,7 @@ export class NewsItem extends Component {
               {/* Some quick example text to build on the card title and make up the
               bulk of the card's content. */}
             </p>
-            <a href={url} target="_blank" className="btn btn-dark">
+            <a href={url} target="_blank" rel="noreferrer" className="btn btn-dark">
               Read more
             </a>
           </div>

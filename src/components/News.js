@@ -114,7 +114,9 @@ export class News extends Component {
   handlePrevClick = async () => {
     let url = `https://newsapi.org/v2/top-headlines?country=${
       this.props.country
-    }&category=${this.props.category}&apiKey=59caab13f9bc472a8485fc671d842e48&pageSize=${
+    }&category=${
+      this.props.category
+    }&apiKey=59caab13f9bc472a8485fc671d842e48&pageSize=${
       this.props.pageSize
     }&page=${this.state.page - 1}`;
     this.setState({ loading: true });
@@ -133,7 +135,9 @@ export class News extends Component {
   handleNextClick = async () => {
     let url = `https://newsapi.org/v2/top-headlines?country=${
       this.props.country
-    }&category=${this.props.category}&apiKey=59caab13f9bc472a8485fc671d842e48&pageSize=${
+    }&category=${
+      this.props.category
+    }&apiKey=59caab13f9bc472a8485fc671d842e48&pageSize=${
       this.props.pageSize
     }&page=${this.state.page + 1}`;
     this.setState({ loading: true });
@@ -169,6 +173,9 @@ export class News extends Component {
                     }
                     imageUrl={element.urlToImage}
                     url={element.url}
+                    author={element.author ? element.author : "Staff"}
+                    date={element.publishedAt}
+                    source={element.source.name}
                   />
                 </div>
               );

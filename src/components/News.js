@@ -184,6 +184,25 @@ export class News extends Component {
     // });
     this.updateNews()
   };
+
+  fetchMoreData = async () => {
+    this.setState({ page: this.state.page + 1 });
+    // updateNews()
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&pageSize=${this.props.pageSize}&page=${this.state.page}`;
+    // loading no longer required as InfiniteScroll handles showing the loading on scroll down. It is still shown the on 1st load
+    // this.setState({ loading: true });
+    let data = await fetch(url);
+    let parsedData = data.json();
+    parsedData.then((json) => {
+      console.log("Total results: ", json.totalResults);
+      this.setState({
+        articles: this.state.articles.concat(json.articles),
+        // loading: false,
+        totalResults: json.totalResults,
+      });
+    });
+  };
+
   render() {
     return (
       <div className="container my-3">

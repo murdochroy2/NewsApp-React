@@ -56,12 +56,13 @@ export default class App extends Component {
               }
             />
             <Route
-              key="entertainment"
               exact
               path="/entertainment"
               element={
                 <News
                   setProgress={this.setProgress}
+                  apiKey={this.apiKey}
+                  key="entertainment"
                   pageSize={this.pageSize}
                   country="in"
                   category="entertainment"

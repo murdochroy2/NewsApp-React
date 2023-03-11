@@ -104,12 +104,19 @@ export class News extends Component {
   }
 
   async updateNews() {
-    this.props.setProgress(10);
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&pageSize=${this.props.pageSize}&page=${this.state.page}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${
+      this.props.country
+    }&category=${
+      this.props.category
+    }&apiKey=59caab13f9bc472a8485fc671d842e48&pageSize=${
+      this.props.pageSize
+    }&page=${this.state.page}`;
     this.setState({ loading: true });
     let data = await fetch(url);
     let parsedData = data.json();
+    this.props.setProgress(30);
     parsedData.then((json) => {
+      this.props.setProgress(70);
       console.log("Total results: ", json.totalResults);
       this.setState({
         articles: json.articles,
@@ -117,6 +124,7 @@ export class News extends Component {
         totalResults: json.totalResults,
       });
     });
+    this.props.setProgress(100);
   }
   async componentDidMount() {
     // console.log("cdm");

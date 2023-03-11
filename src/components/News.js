@@ -136,7 +136,7 @@ export class News extends Component {
     //     totalResults: json.totalResults,
     //   });
     // });
-    this.updateNews()
+    this.updateNews();
   }
   handlePrevClick = async () => {
     this.setState({ page: this.state.page + 1 });
@@ -159,10 +159,10 @@ export class News extends Component {
     //     totalResults: json.totalResults,
     //   });
     // });
-    this.updateNews()
+    this.updateNews();
   };
   handleNextClick = async () => {
-    this.setState({page:this.state.page + 1})
+    this.setState({ page: this.state.page + 1 });
     // let url = `https://newsapi.org/v2/top-headlines?country=${
     //   this.props.country
     // }&category=${
@@ -182,7 +182,7 @@ export class News extends Component {
     //     totalResults: json.totalResults,
     //   });
     // });
-    this.updateNews()
+    this.updateNews();
   };
 
   fetchMoreData = async () => {
@@ -205,31 +205,51 @@ export class News extends Component {
 
   render() {
     return (
-      <div className="container my-3">
+      // <div className="container my-3">
+      <>
         <div className="row my-3">
-          <h1 className="text-center">NewsMonkey - Top Headlines</h1>
+          <h1 className="text-center">
+            NewsMonkey - Top Headlines from{" "}
+            {`${this.capitalizeFirstLetter(this.props.category)}`}
+          </h1>
+          {/* Checking loading and displaying Spinner has been replaced by infinite scroll */}
+          {/* When no articles are loaded spinner will be shown for the first time */}
           {this.state.loading && <Spinner className="text-center" />}
-          {!this.state.loading &&
-            this.state.articles.map((element) => {
-              // console.log(element);
-              return (
-                <div className="col-md-4" key={element.url}>
-                  <NewsItem
-                    title={element.title ? element.title.slice(0, 48) : ""}
-                    description={
-                      element.description
-                        ? element.description.slice(0, 88)
-                        : ""
-                    }
-                    imageUrl={element.urlToImage}
-                    url={element.url}
-                    author={element.author ? element.author : "Staff"}
-                    date={element.publishedAt}
-                    source={element.source.name}
-                  />
-                </div>
-              );
-            })}
+          <InfiniteScroll
+            dataLength={this.state.articles.length}
+            next={this.fetchMoreData}
+            hasMore={this.state.articles.length !== this.state.totalResults}
+            loader={
+              <h4>
+                <Spinner></Spinner>
+              </h4>
+            }
+          >
+            <div className="container my-3">
+              <div className="className row">
+                {this.state.articles.map((element) => {
+                  // console.log(element);
+                  return (
+                    <div className="col-md-4" key={element.url}>
+                      <NewsItem
+                        title={element.title ? element.title.slice(0, 48) : ""}
+                        description={
+                          element.description
+                            ? element.description.slice(0, 88)
+                            : ""
+                        }
+                        imageUrl={element.urlToImage}
+                        url={element.url}
+                        author={element.author ? element.author : "Staff"}
+                        date={element.publishedAt}
+                        source={element.source.name}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </InfiniteScroll>
           {/* <div className="col-md-4">
             <NewsItem />
           </div>
@@ -241,7 +261,7 @@ export class News extends Component {
           <button
             type="button"
             className="btn btn-dark"
-            onClick={this.handlePrevClick}
+            // onClick={this.handlePrevClick}
             disabled={this.state.page <= 1}
           >
             &larr; Previous
@@ -249,7 +269,7 @@ export class News extends Component {
           <button
             type="button"
             className="btn btn-dark"
-            onClick={this.handleNextClick}
+            // onClick={this.handleNextClick}
             disabled={
               this.state.page >=
               Math.ceil(this.state.totalResults / this.props.pageSize)
@@ -258,7 +278,9 @@ export class News extends Component {
             Next &rarr;
           </button>
         </div>
-      </div>
+        {/* Commented out as this div was returning a horizontal scroll bar */}
+        {/* </div> */}
+      </>
     );
   }
 }

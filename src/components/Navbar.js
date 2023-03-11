@@ -1,11 +1,10 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <div>
-      <nav className="navbar navbar-dark bg-dark navbar-expand-lg bg-body-tertiary">
+      <nav className="navbar navbar-dark bg-dark navbar-expand-lg bg-body-tertiary fixed-top">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
             NewsMonkey

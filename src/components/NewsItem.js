@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 const NewsItem = (props) => {
   // Constructor will be used in the News Component
@@ -7,7 +7,7 @@ const NewsItem = (props) => {
   //   console.log("Hello from NewsItem constructor");
   // }
 
-  let { title, description, imageUrl, url, author, date, source } = props;
+  let { title, description, imageUrl, url, author, date } = props; // source
   return (
     <div>
       <div className="card">

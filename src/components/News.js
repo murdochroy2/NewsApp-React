@@ -90,13 +90,17 @@ export class News extends Component {
   capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
+  constructor(props) {
     super();
     this.state = {
       articles: [],
-      loading: false,
+      loading: true,
       page: 1,
       totalResults: 0,
     };
+    document.title = `${this.capitalizeFirstLetter(
+      props.category
+    )} - NewsMonkey`;
   }
 
   async updateNews() {

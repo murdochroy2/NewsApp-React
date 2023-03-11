@@ -79,9 +79,6 @@ const News = (props) => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  /* document.title = `${capitalizeFirstLetter(
-    props.category
-  )} - NewsMonkey`; */
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -90,7 +87,7 @@ const News = (props) => {
   const updateNews = async () => {
     props.setProgress(10);
     const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&pageSize=${props.pageSize}&page=${page}`;
-    setLoading(true)
+    setLoading(true);
     let data = await fetch(url);
     let parsedData = data.json();
     props.setProgress(30);
@@ -105,29 +102,34 @@ const News = (props) => {
   };
   useEffect(() => {
     updateNews();
+    document.title = `${capitalizeFirstLetter(props.category)} - NewsMonkey`;
   }, []);
 
   const handlePrevClick = async () => {
-    setPage(page-1)
+    setPage(page - 1);
     updateNews();
   };
   const handleNextClick = async () => {
-    setPage(page+1)
+    setPage(page + 1);
     updateNews();
   };
 
   const fetchMoreData = async () => {
-    setPage(page+1)
+    setPage(page + 1);
     // updateNews()
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&pageSize=${props.pageSize}&page=${page+1}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${
+      props.country
+    }&category=${props.category}&apiKey=${props.apiKey}&pageSize=${
+      props.pageSize
+    }&page=${page + 1}`;
     // loading no longer required as InfiniteScroll handles showing the loading on scroll down. It is still shown the on 1st load
     // setState({ loading: true });
     let data = await fetch(url);
     let parsedData = data.json();
     parsedData.then((json) => {
       console.log("Total results: ", json.totalResults);
-      setArticles(articles.concat(json.articles))
-      setTotalResults(json.totalResults)
+      setArticles(articles.concat(json.articles));
+      setTotalResults(json.totalResults);
     });
   };
 
@@ -135,7 +137,7 @@ const News = (props) => {
     // <div className="container my-3">
     <>
       <div className="row my-3">
-        <h1 className="text-center">
+        <h1 className="text-center" style={{ marginTop: "45px" }}>
           NewsMonkey - Top Headlines from{" "}
           {`${capitalizeFirstLetter(props.category)}`}
         </h1>
@@ -197,10 +199,7 @@ const News = (props) => {
           type="button"
           className="btn btn-dark"
           // onClick={handleNextClick}
-          disabled={
-            page >=
-            Math.ceil(totalResults / props.pageSize)
-          }
+          disabled={page >= Math.ceil(totalResults / props.pageSize)}
         >
           Next &rarr;
         </button>

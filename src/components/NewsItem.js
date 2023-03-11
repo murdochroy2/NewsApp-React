@@ -21,13 +21,15 @@ export class NewsItem extends Component {
             className="card-img-top"
             alt="..."
           />
-          <span
-            className="position-absolute top-0 translate-middle badge rounded-pill bg-danger"
-            style={{ zIndex: 1, left: author.length > 5 ? "90%" : "95%" }}
+          <div
+            className="d-flex justify-content-end"
+            style={{ position: "absolute", right: 0 }}
           >
-            {author}
-            <span className="visually-hidden">unread messages</span>
-          </span>
+            <span className="badge rounded-pill bg-danger">
+              {author}
+              <span className="visually-hidden">unread messages</span>
+            </span>
+          </div>
 
           <div className="card-body">
             <h5 className="card-title">
